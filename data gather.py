@@ -2,8 +2,8 @@ import reddit_data_collector as rdc
 #i removed my api key so it wont work, but this is the code i used to gather the data
 data_collector = rdc.DataCollector(
     client_id = "placeholder",
-    client_secret = "placeholder2",
-    user_agent = "python:DNDSentimentAnalysis:v1.1 (by u/StreakWolf47)")
+    client_secret = "placeholder1",
+    user_agent = "python:DNDSentimentAnalysis:v1.2 (by u/StreakWolf47)")
 
 posts, comments = data_collector.get_data(
     subreddits = ["3d6", "DnDoptimized"],

@@ -5,6 +5,8 @@ classes = ["Artificer","Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk"
 classcounts = [0,0,0,0,0,0,0,0,0,0,0,0,0]
 classsentimenttotals = [0,0,0,0,0,0,0,0,0,0,0,0,0]
 averagesentiments = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+highestsentiments = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+lowestsentiments = [0,0,0,0,0,0,0,0,0,0,0,0,0]
 results=[]
 postsdf = pd.read_csv('C:\dnd sentiment project\posts\sentimentposts.csv')
 commentsdf = pd.read_csv('C:\dnd sentiment project\comments\sentimentcomments.csv')
@@ -16,6 +18,10 @@ for i in range(len(classes)):
         if classes[i].lower() in title or classes[i] in title or (classes[i] + "s") in title:
             classcounts[i] = classcounts[i] + 1
             classsentimenttotals[i] = classsentimenttotals[i] + row['Sentiment']
+            if row['Sentiment'] > highestsentiments[i]:
+                highestsentiments[i] = row['Sentiment']
+            if row['Sentiment'] < lowestsentiments[i]:
+                lowestsentiments[i] = row['Sentiment']
         elif classes[i].lower() not in title or classes[i] not in title or (classes[i] + "s") not in title:
             continue
     for index, row in commentsdf.iterrows():
@@ -23,6 +29,10 @@ for i in range(len(classes)):
         if classes[i].lower() in body or classes[i] in body or (classes[i] + "s") in body:
             classcounts[i] = classcounts[i] + 1
             classsentimenttotals[i] = classsentimenttotals[i] + row['Sentiment']
+            if row['Sentiment'] > highestsentiments[i]:
+                highestsentiments[i] = row['Sentiment']
+            if row['Sentiment'] < lowestsentiments[i]:
+                lowestsentiments[i] = row['Sentiment']
         elif classes[i].lower() not in body or classes[i] not in body or (classes[i] + "s") not in body:
             continue
     for index, row in mentionspostsdf.iterrows():
@@ -45,12 +55,12 @@ for i in range(len(classes)):
         print(classes[i] + " has " + str(classcounts[i]) + " mentions and an average sentiment of " + str(classsentimenttotals[i]/classcounts[i]))
         averagesentiments[i] = classsentimenttotals[i]/classcounts[i]
         time.sleep(0.5)
-print("Analysis complete.")
+print("Analysis complete, more details found on the output.csv file.")
 for i in range(len(classes)):
-    data = [classes[i], classcounts[i],classsentimenttotals[i], averagesentiments[i]]
+    data = [classes[i], classcounts[i],classsentimenttotals[i], averagesentiments[i], highestsentiments[i], lowestsentiments[i]]
     results.append(data)
 with open('C:\dnd sentiment project\output.csv', 'w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(["Class", "Mentions","Total Sentiment", "Average Sentiment"])
+    writer.writerow(["Class", "Mentions","Total Sentiment", "Average Sentiment", "Highest Sentiment", "Lowest Sentiment"])
     for i in range(len(results)):
         writer.writerow(results[i])
